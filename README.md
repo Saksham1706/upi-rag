@@ -29,8 +29,8 @@ Hugging Face local model (FLAN-T5-Small)
 Pandas
 
 
+<img width="546" height="629" alt="image" src="https://github.com/user-attachments/assets/be203687-b0fb-40fd-9ba2-d606b09d8b76" />
 
-<img width="808" height="381" alt="image" src="https://github.com/user-attachments/assets/0ec42c89-2e2d-4211-acf8-d4cf122c5fc3" />
 
 Output:
 
@@ -43,13 +43,31 @@ The articles were collected using web scraping in a separate project.
 
 That scraper is not included here.
 
-Why this project
 
-Works fully offline
+###System Architecture
 
-No API keys needed
+1. **Data Collection**
+   - Web scraping of UPI-related news articles
+   - Articles saved in PDF format
 
-Good example of RAG + local LLM
+2. **Preprocessing**
+   - PDF text extraction using `pypdf`
+   - Text cleaning and filtering
+   - Document chunking (300 tokens, 100-token overlap)
+
+3. **Embedding & Indexing**
+   - Sentence-transformer embeddings
+   - FAISS index for semantic similarity search
+
+4. **Retrieval & RAG**
+   - Query embedding
+   - Top-k chunk retrieval
+   - Mapping chunks back to source PDFs
+
+5. **Evaluation**
+   - Weakly supervised queries
+   - Retrieval evaluation using Recall@k
+   - Filename normalization for robust matching
 
 
 
