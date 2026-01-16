@@ -10,6 +10,20 @@ Path(output_folder).mkdir(exist_ok=True)
 
 data = []
 
+def chunk_text(text, chunk_size=300, overlap=100):
+    words = text.split()
+    chunks = []
+
+    start = 0
+    while start < len(words):
+        end = start + chunk_size
+        chunk = " ".join(words[start:end])
+        chunks.append(chunk)
+        start += chunk_size - overlap
+
+    return chunks
+
+
 for pdf in Path(raw_folder).glob("*.pdf"):
     try:
         reader = PdfReader(pdf)
@@ -27,12 +41,17 @@ for pdf in Path(raw_folder).glob("*.pdf"):
             print(f"Skipped (too short): {pdf.name}")
             continue
 
-        data.append({
-            "file_name": pdf.stem,
-            "text": article_text
-        })
+        # 🔥 CHUNKING LOGIC (NEW)
+        chunks = chunk_text(article_text)
 
-        print(f"Processed: {pdf.name}")
+        for chunk_id, chunk in enumerate(chunks):
+            data.append({
+                "file_name": pdf.stem,   # keep stem (no .pdf)
+                "chunk_id": chunk_id,
+                "text": chunk
+            })
+
+        print(f"Processed & chunked: {pdf.name} | Chunks: {len(chunks)}")
 
     except Exception as error:
         print(f"Error reading {pdf.name}: {error}")
@@ -41,4 +60,4 @@ df = pd.DataFrame(data)
 df.to_csv(output_file, index=False)
 
 print("\nDone!")
-print(f"Total articles saved: {len(df)}")
+print(f"Total chunks saved: {len(df)}")
