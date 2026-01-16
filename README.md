@@ -17,32 +17,12 @@ The system processes unstructured PDF news articles, performs semantic retrieval
 > All preprocessing, embedding generation, indexing, and retrieval run locally.
 
 
-Tech Used
-
-Python
-
-Sentence Transformers (MiniLM)
-
-FAISS (vector search)
-
-Hugging Face local model (FLAN-T5-Small)
-
-Pandas
-
 
 <img width="546" height="629" alt="image" src="https://github.com/user-attachments/assets/be203687-b0fb-40fd-9ba2-d606b09d8b76" />
 
 
 Output:
-
 Answer generated from the uploaded articles along with source filenames.
-
-
-###Data Note
-
-The articles were collected using web scraping in a separate project.
-
-That scraper is not included here.
 
 
 ###System Architecture
