@@ -1,129 +1,23 @@
-UPI Fraud RAG Project
-What is this project?
-
-This project builds a question-answering system over UPI-related news articles using a Retrieval-Augmented Generation (RAG) approach.
-
-Instead of searching articles manually, you can ask a question and get:
-
-a short answer
-
-based only on relevant articles
-
-with source references
-
-The system works completely locally without paid APIs.
-
-What problem does it solve?
-
-News articles about UPI often contain important information about:
-
-fraud cases
-
-user mistakes
-
-operational risks
-
-Reading many articles manually is slow.
-This project helps extract answers automatically from multiple articles.
-
-How it works (simple flow)
-PDF Articles
-   ↓
-Text extraction
-   ↓
-Vector embeddings
-   ↓
-FAISS similarity search
-   ↓
-Local language model
-   ↓
-Final answer + sources
-
-Folder structure
-llm-articles/
-│
+UPI Fraud Analysis: Local RAG SystemAn end-to-end Retrieval-Augmented Generation (RAG) pipeline designed to analyze UPI-related fraud news. This system performs semantic search across PDF documents and generates answers locally, ensuring data privacy and zero API costs.OverviewManually tracking UPI fraud trends across dozens of news reports is inefficient. This project automates the synthesis of information by:Ingesting scraped PDF news articles.Indexing content into a high-performance vector database.Generating concise answers based strictly on retrieved context to minimize hallucinations.System ArchitectureThe pipeline follows a modular design to separate data processing from inference:Extraction: Converts raw PDFs into cleaned, normalized text chunks.Embedding: Uses SentenceTransformers to map text to a 384-dimensional vector space.Indexing: Stores embeddings in a FAISS index for lightning-fast similarity searches.Augmentation: Retrieves the top-k most relevant document snippets.Generation: A local LLM (Hugging Face) synthesizes the final answer using the snippets as a knowledge base.Tech StackComponentTechnologyLanguagePython 3.9+Vector StoreFAISS (Facebook AI Similarity Search)Embeddingssentence-transformers/all-MiniLM-L6-v2LLMLocal Hugging Face Transformers (Quantized)Data HandlingPandas, PyPDFProject StructurePlaintextupi-fraud-rag/
 ├── data/
-│   ├── raw/            # PDF articles
-│   └── processed/      # CSV, embeddings, FAISS index
-│
+│   ├── raw/             # Input PDF articles (User-provided)
+│   └── processed/       # FAISS index and metadata
 ├── src/
-│   ├── preprocess.py
-│   ├── embed.py
-│   ├── save_embeddings.py
-│   └── rag.py
-│
-├── run_pipeline.py     # Runs all steps together
-└── README.md
+│   ├── preprocess.py    # PDF text extraction logic
+│   ├── embed.py         # Vectorization & FAISS indexing
+│   ├── retriever.py     # Similarity search logic
+│   └── rag.py           # LLM Prompting & Answer generation
+├── run_pipeline.py      # Master script to execute full flow
+└── .gitignore           # Prevents tracking of large data/PDF files
+Installation and Usage1. PrerequisitesEnsure you have the PDF articles in data/raw/.2. InstallationBash# Clone the repository
+git clone https://github.com/yourusername/upi-fraud-rag.git
+cd upi-fraud-rag
 
-How to run the project
-1️⃣ Activate virtual environment
-venv\Scripts\activate
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-2️⃣ Run the full pipeline
-python run_pipeline.py
-
-
-This will:
-
-process PDFs
-
-create embeddings
-
-build FAISS index
-
-run the RAG system
-
-Example question
-
-Question
-
-What are common UPI fraud issues mentioned in recent articles?
-
-
-Answer
-
-A common issue occurs when a UPI-linked mobile number is deactivated and reassigned,
-causing money to be transferred to the wrong person.
-
-
-Source
-
-Transferred money to wrong UPI linked mobile number
-
-Tools and libraries used
-
-Python
-
-Pandas
-
-SentenceTransformers
-
-FAISS
-
-Hugging Face Transformers
-
-PyPDF
-
-Why a small local model?
-
-Works on laptops with limited RAM
-
-No API keys needed
-
-Fully offline
-
-Stable and reproducible
-
-The model focuses on retrieved context, not general knowledge.
-
-What I learned from this project
-
-Building an end-to-end RAG pipeline
-
-Working with unstructured PDF data
-
-Using vector databases for semantic search
-
-Handling context length limitations
-
-Making practical engineering trade-offs
+# Install dependencies
+pip install -r requirements.txt
+3. ExecutionTo process the documents and start the QA system:Bashpython run_pipeline.py
+Example OutputUser Query: What happens if my UPI-linked number is deactivated?Generated Answer: According to recent reports, if a mobile number is deactivated and reassigned by the telecom provider, the new owner may gain access to the previous user's UPI link, leading to unauthorized fund transfers.Source: Article: "Risk of Reassigned Mobile Numbers in UPI Ecosystem.pdf"Data Source NoteThis repository contains the RAG Engine. The web scraping pipeline used to collect the news articles is maintained in a separate private repository to keep this project focused on NLP and Information Retrieval.Future RoadmapChunking Optimization: Implement Recursive Character Splitting for better context.UI: Build a Streamlit dashboard for easier querying.Reranking: Add a Cross-Encoder stage to improve retrieval precision.Evaluation: Integrate RAGAS scores for faithfulness and relevancy.
