@@ -13,8 +13,8 @@ The system processes unstructured PDF news articles, performs semantic retrieval
 - Indexed embeddings locally using **FAISS** for efficient similarity search.
 - Evaluated retrieval quality using **Recall@k**, and iteratively improved performance through chunk-size and overlap tuning.
 
-> Note: The Hugging Face API key is used only to access pretrained models.  
-> All preprocessing, embedding generation, indexing, and retrieval run locally.
+- Note: The Hugging Face API key is used only to access pretrained models.  
+- All preprocessing, embedding generation, indexing, and retrieval run locally.
 
 
 
