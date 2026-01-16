@@ -1,19 +1,20 @@
-UPI Fraud RAG System
+### Local RAG System for UPI News Retrieval
+
+This project implements a **local Retrieval-Augmented Generation (RAG)** pipeline to retrieve and answer questions from **UPI-related news articles**.  
+The system processes unstructured PDF news articles, performs semantic retrieval using dense embeddings and FAISS, and evaluates retrieval quality using Recall@k under weakly supervised settings.
 
 
-This project is a simple Retrieval-Augmented Generation (RAG) system to analyze UPI fraud-related news articles.
+### Project Overview
 
-It allows you to ask questions and get answers only from the uploaded articles, using a local language model (no paid APIs).
+- Collected UPI-related news articles via **web scraping** and stored them as PDFs.
+- Extracted and cleaned unstructured text from PDFs.
+- Applied **document chunking with overlap** to improve semantic retrieval.
+- Generated dense embeddings using **sentence-transformer models** accessed via Hugging Face.
+- Indexed embeddings locally using **FAISS** for efficient similarity search.
+- Evaluated retrieval quality using **Recall@k**, and iteratively improved performance through chunk-size and overlap tuning.
 
-What this project does
-
-Takes UPI-related news articles (PDF / text)
-
-Converts them into searchable text
-
-Finds the most relevant articles for a question
-
-Generates an answer based on those articles only
+> Note: The Hugging Face API key is used only to access pretrained models.  
+> All preprocessing, embedding generation, indexing, and retrieval run locally.
 
 
 Tech Used
